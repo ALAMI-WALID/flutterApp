@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mlkit/firebase_options.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,19 +55,62 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+//variable
+  late TextEditingController controller;
+  late LanguageIdentifier identifier;
+  String langSimple="";
+  String langMultiple="";
 
-  void _incrementCounter() {
+
+
+  //méthode
+
+  getSimple() async{
+    if(controller.text == "") return;
+    String phrase = controller.text; 
+    final langageIdentified = await identifier.identifyLanguage(phrase);
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      langSimple = langageIdentified;
+      
     });
+
   }
 
+  getMultiple() async{
+    if(controller.text == "") return;
+    String phrase = controller.text;
+    final LangageIdentified = await identifier.identifyPossibleLanguages(phrase);
+    if(LangageIdentified.isEmpty){
+      langMultiple =" Nous n'avos pas pu trouver de corrsepondance";
+    }
+    else{
+      for(var lang in LangageIdentified){
+        setState(() {
+         langMultiple += "${lang.languageTag}, confiance : ${lang.confidence * 100.toInt()} %";
+
+        });
+      }
+
+
+    }
+  }
+  
+  @override
+  void initState() {
+
+    controller = TextEditingController();
+    identifier = LanguageIdentifier(confidenceThreshold: 0.4);
+    super.initState();
+  }
+  //traduction de langue
+
+   @override
+  void dispose() {
+   controller.dispose();
+   identifier.close();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -79,43 +123,34 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("hello"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          TextField(
+            controller: controller,
+            decoration: const InputDecoration(
+              hintText: "Text vide"
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          ),
+
+
+          Text("Texte simple identifier : $langSimple"),
+          Text("Texte multiple identifier: $langMultiple"),
+          ElevatedButton(
+            onPressed: getSimple, 
+            child: const Text("Une langue")
+          ),
+          ElevatedButton(
+            onPressed: getMultiple, 
+            child: const Text("Plusieur Langues")
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        ],
+      )
+
+
+
     );
   }
 }

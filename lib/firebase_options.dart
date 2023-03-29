@@ -44,40 +44,39 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD98tBJA9hjcZYZkgX5VVDoXQJYWZix0tA',
-    appId: '1:74710977614:web:639dd7dc1bb10a62f8871f',
-    messagingSenderId: '74710977614',
-    projectId: 'machinelearning-9d985',
-    authDomain: 'machinelearning-9d985.firebaseapp.com',
-    storageBucket: 'machinelearning-9d985.appspot.com',
-    measurementId: 'G-HFT62W4L6H',
+    apiKey: 'AIzaSyC_61pH9ijrskysvikbPh_X-8XXfvexsbU',
+    appId: '1:576901217068:web:b13bf9fdec5ce607968a89',
+    messagingSenderId: '576901217068',
+    projectId: 'tchat-33d29',
+    authDomain: 'tchat-33d29.firebaseapp.com',
+    storageBucket: 'tchat-33d29.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBvm4MQzo1emzdeF-U1jw-FRmKbBgiiBfk',
-    appId: '1:74710977614:android:20ba9930e5f9720af8871f',
-    messagingSenderId: '74710977614',
-    projectId: 'machinelearning-9d985',
-    storageBucket: 'machinelearning-9d985.appspot.com',
+    apiKey: 'AIzaSyDaacxXyXx9AEknweWCz6ayCPValoB_vt8',
+    appId: '1:576901217068:android:ad3c57ae1228b1e5968a89',
+    messagingSenderId: '576901217068',
+    projectId: 'tchat-33d29',
+    storageBucket: 'tchat-33d29.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBaJHP9qM4OM_mniv4iZNWQHdFyTMPfKiA',
-    appId: '1:74710977614:ios:d0fb055bc4ccf853f8871f',
-    messagingSenderId: '74710977614',
-    projectId: 'machinelearning-9d985',
-    storageBucket: 'machinelearning-9d985.appspot.com',
-    iosClientId: '74710977614-akn7n2jqp5faqhbsonvcqhi1obuc6iqi.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mlkit',
+    apiKey: 'AIzaSyB2MuVU-dbS_tWhK8AUXdl95YYxl2z6WAo',
+    appId: '1:576901217068:ios:733928caf09e0c44968a89',
+    messagingSenderId: '576901217068',
+    projectId: 'tchat-33d29',
+    storageBucket: 'tchat-33d29.appspot.com',
+    iosClientId: '576901217068-mttib0q78b50p7tk742spoqkrh2kncar.apps.googleusercontent.com',
+    iosBundleId: 'com.example.tchatFlutter',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBaJHP9qM4OM_mniv4iZNWQHdFyTMPfKiA',
-    appId: '1:74710977614:ios:d0fb055bc4ccf853f8871f',
-    messagingSenderId: '74710977614',
-    projectId: 'machinelearning-9d985',
-    storageBucket: 'machinelearning-9d985.appspot.com',
-    iosClientId: '74710977614-akn7n2jqp5faqhbsonvcqhi1obuc6iqi.apps.googleusercontent.com',
-    iosBundleId: 'com.example.mlkit',
+    apiKey: 'AIzaSyB2MuVU-dbS_tWhK8AUXdl95YYxl2z6WAo',
+    appId: '1:576901217068:ios:733928caf09e0c44968a89',
+    messagingSenderId: '576901217068',
+    projectId: 'tchat-33d29',
+    storageBucket: 'tchat-33d29.appspot.com',
+    iosClientId: '576901217068-mttib0q78b50p7tk742spoqkrh2kncar.apps.googleusercontent.com',
+    iosBundleId: 'com.example.tchatFlutter',
   );
 }
