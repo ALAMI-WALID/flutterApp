@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mlkit/firebase_options.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:mlkit/view/LoginPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -125,29 +126,31 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: const Text("hello"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          TextField(
-            controller: controller,
-            decoration: const InputDecoration(
-              hintText: "Text vide"
-            ),
-          ),
+      body: const LoginPage()
+      
+      // Column(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: [
+      //     TextField(
+      //       controller: controller,
+      //       decoration: const InputDecoration(
+      //         hintText: "Text vide"
+      //       ),
+      //     ),
 
 
-          Text("Texte simple identifier : $langSimple"),
-          Text("Texte multiple identifier: $langMultiple"),
-          ElevatedButton(
-            onPressed: getSimple, 
-            child: const Text("Une langue")
-          ),
-          ElevatedButton(
-            onPressed: getMultiple, 
-            child: const Text("Plusieur Langues")
-            ),
-        ],
-      )
+      //     Text("Texte simple identifier : $langSimple"),
+      //     Text("Texte multiple identifier: $langMultiple"),
+      //     ElevatedButton(
+      //       onPressed: getSimple, 
+      //       child: const Text("Une langue")
+      //     ),
+      //     ElevatedButton(
+      //       onPressed: getMultiple, 
+      //       child: const Text("Plusieur Langues")
+      //       ),
+      //   ],
+      // )
 
 
 
