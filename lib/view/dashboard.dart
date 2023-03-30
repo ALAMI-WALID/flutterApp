@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'listUser.dart';
 import 'message.dart';
 
 class DashBoard extends StatefulWidget {
@@ -30,7 +31,7 @@ class _DashBoardState extends State<DashBoard> {
         width: MediaQuery.of(context).size.width * 0.5,
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
-        child: Text("je suis dans le drawer"),
+        child: listUserDisplay(userId: userId!),
       ),
       appBar: AppBar(),
       body: bodyPage(currentPage),

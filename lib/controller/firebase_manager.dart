@@ -64,4 +64,21 @@ Future <Utilisateur> connect(String email, String password) async {
 
 //suppression d'un utlisateur
 
+
+
+// get list sender 
+Future<List<String>> getUniqueSenders(String userId) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('MESSAGES')
+      .where('recipientId', isEqualTo: userId)
+      .get();
+  List<String> senders = snapshot.docs
+      .map((doc) => (doc.data() as Map<String, dynamic>)['senderEmail']?.toString() ?? '')
+      .toList();
+      print("JE SUIS LA MON AMIS ");
+      print(senders.toSet().toList());
+  return senders.toSet().toList();
+}
+
+
 }

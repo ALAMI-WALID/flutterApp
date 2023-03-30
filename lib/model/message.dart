@@ -1,22 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
-  final String message;
-  final String senderId;
-  final DateTime timestamp;
+  String senderId;
+  String senderEmail;
+  String recipientId;
+  String recipientEmail;
+  String message;
+  Timestamp time;
 
   Message({
-    required this.message,
     required this.senderId,
-    required this.timestamp,
+    required this.senderEmail,
+    required this.recipientId,
+    required this.recipientEmail,
+    required this.message,
+    required this.time,
   });
 
-  static Message fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  Map<String, dynamic> toMap() {
+    return {
+      'senderId': senderId,
+      'senderEmail': senderEmail,
+      'recipientId': recipientId,
+      'recipientEmail': recipientEmail,
+      'message': message,
+      'time': time,
+    };
+  }
+
+  factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
-      message: data['message'] ?? '',
-      senderId: data['senderId'] ?? '',
-      timestamp: (data['timestamp'] as Timestamp).toDate(),
+      senderId: map['senderId'],
+      senderEmail: map['senderEmail'],
+      recipientId: map['recipientId'],
+      recipientEmail: map['recipientEmail'],
+      message: map['message'],
+      time: map['time'],
     );
   }
+
+  static fromFirestore(QueryDocumentSnapshot<Object?> doc) {}
 }

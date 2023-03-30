@@ -88,10 +88,10 @@ class _LoginPageState extends State<LoginPage> {
             decoration: BoxDecoration(
               //color: Colors.amber,
               borderRadius: BorderRadius.circular(20),
-              image: const DecorationImage(
-                image:AssetImage("assets/zelda.png"),
-                fit: BoxFit.fill
-              )
+              // image: const DecorationImage(
+              //   image:AssetImage("assets/zelda.png"),
+              //   fit: BoxFit.fill
+              // )
             ),
           ),
           const SizedBox(height: 10),

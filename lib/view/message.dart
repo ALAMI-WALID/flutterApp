@@ -1,39 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../model/message.dart';
 
-class ChatScreen extends StatelessWidget {
-  final String ?currentUserId;
+class ChatScreen extends StatefulWidget {
+  final String? currentUserId;
 
-  ChatScreen({super.key, required this.currentUserId});
+  ChatScreen({Key? key, required this.currentUserId}) : super(key: key);
 
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
-  void _sendMessage() {
+void _sendMessage() async {
     final String messageText = _textEditingController.text;
     _textEditingController.clear();
 
     if (messageText.trim().isEmpty) return;
 
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final senderEmail = currentUser!.email;
+
     FirebaseFirestore.instance.collection('messages').add({
       'message': messageText,
-      'senderId': currentUserId,
+      'senderId': widget.currentUserId,
+      'senderEmail': senderEmail,
       'timestamp': Timestamp.now(),
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-      ),
+
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('messages').snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('messages').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -41,9 +52,23 @@ class ChatScreen extends StatelessWidget {
                   );
                 }
 
-                final messages = snapshot.data!.docs.map((doc) => Message.fromFirestore(doc)).toList();
+                final messages = snapshot.data!.docs
+                    .map((doc) => Message.fromFirestore(doc))
+                    .toList()
+                  ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+
+                // Scroll to the end of the list when new messages arrive
+                WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  _scrollController.animateTo(
+                    _scrollController.position.maxScrollExtent,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                });
 
                 return ListView.builder(
+                  controller:
+                      _scrollController, // Attach the ScrollController to the ListView
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
@@ -82,5 +107,3 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
-
-
