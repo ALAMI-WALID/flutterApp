@@ -1,45 +1,50 @@
 import 'package:flutter/material.dart';
-
-// import firebase FirebaseManager
+import 'package:firebase_auth/firebase_auth.dart';
 import '../controller/firebase_manager.dart';
 
+class listUserDisplay extends StatefulWidget {
+  const listUserDisplay({Key? key}) : super(key: key);
 
-class listUserDisplay extends StatelessWidget {
-  final String userId;
-  FirebaseManager firebaseManager = FirebaseManager();
+  @override
+  _listUserDisplayState createState() => _listUserDisplayState();
+}
+
+class _listUserDisplayState extends State<listUserDisplay> {
+  late Future<List<String>> _userEmails;
+    FirebaseManager firebaseManager = FirebaseManager();
 
 
-  listUserDisplay({required this.userId});
+  @override
+  void initState() {
+    super.initState();
+    _userEmails = firebaseManager.getAllUsersExceptCurrent(FirebaseAuth.instance.currentUser!.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        padding: EdgeInsets.all(20),
-        child: FutureBuilder<List<String>>(
-          future: firebaseManager.getUniqueSenders(userId),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<String> senders = snapshot.data!;
-              return ListView.builder(
-                itemCount: senders.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(senders[index]),
-                    onTap: () {
-                      // Do something when the item is clicked
-                    },
-                  );
-                },
-              );
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
+    return FutureBuilder<List<String>>(
+      future: _userEmails,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        }
+
+        final userEmails = snapshot.data ?? [];
+
+        return ListView.builder(
+          itemCount: userEmails.length,
+          itemBuilder: (context, index) {
+            final userEmail = userEmails[index];
+            return ListTile(
+              title: Text(userEmail),
+              onTap: () {
+                final userSelectedId = 'userSelectedId';
+                print(userSelectedId);
+              },
+            );
           },
-        ),
-      ),
+        );
+      },
     );
   }
 }

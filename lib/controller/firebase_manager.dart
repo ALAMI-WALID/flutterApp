@@ -81,4 +81,19 @@ Future<List<String>> getUniqueSenders(String userId) async {
 }
 
 
+Future<List<String>> getAllUsersExceptCurrent(String currentUserId) async {
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('USERS')
+      .where('userId', isNotEqualTo: currentUserId)
+      .get();
+  List<String> users = snapshot.docs
+      .map((doc) => (doc.data() as Map<String, dynamic>)['senderEmail']?.toString() ?? '')
+
+      .toList();
+      print(users);
+  return users;
+}
+
+
+
 }

@@ -31,7 +31,7 @@ class _DashBoardState extends State<DashBoard> {
         width: MediaQuery.of(context).size.width * 0.5,
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
-        child: listUserDisplay(userId: userId!),
+        child: const listUserDisplay(),
       ),
       appBar: AppBar(),
       body: bodyPage(currentPage),

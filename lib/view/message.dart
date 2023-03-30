@@ -31,6 +31,7 @@ void _sendMessage() async {
       'senderId': widget.currentUserId,
       'senderEmail': senderEmail,
       'timestamp': Timestamp.now(),
+
     });
   }
 
