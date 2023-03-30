@@ -55,8 +55,11 @@ void _sendMessage() async {
                   // recuperer les messages de la collection messages en fonction de l'id de l'utilisateur courant et de l'id du destinataire
                   FirebaseFirestore.instance
                       .collection('messages')
-                      .where('senderId', isEqualTo:  widget.currentUserId)
-                      .where('recipientId', isEqualTo: widget.recipientId)
+                      // .where('users', arrayContainsAny: [widget.currentUserId, widget.recipientId])
+                      .where('senderId', whereIn: [widget.currentUserId, widget.recipientId])
+                      
+                      // .where('senderId', isEqualTo:  widget.recipientId)
+                      // .where('recipientId', isEqualTo: widget.currentUserId)
                       .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
