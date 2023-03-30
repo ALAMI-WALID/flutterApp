@@ -6,21 +6,20 @@ import '../model/message.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? currentUserId;
-   final String? recipientId;
+  final String? recipientId;
 
+  ChatScreen(
+      {Key? key, required this.currentUserId, required this.recipientId});
 
-  ChatScreen( {Key? key, required this.currentUserId, required this.recipientId});
-
- @override
+  @override
   _ChatScreenState createState() => _ChatScreenState();
-
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
-void _sendMessage() async {
+  void _sendMessage() async {
     final String messageText = _textEditingController.text;
     _textEditingController.clear();
 
@@ -36,10 +35,8 @@ void _sendMessage() async {
       'recipientEmail': FirebaseAuth.instance.currentUser!.email,
       'senderEmail': senderEmail,
       'timestamp': Timestamp.now(),
-
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +53,9 @@ void _sendMessage() async {
                   FirebaseFirestore.instance
                       .collection('messages')
                       // .where('users', arrayContainsAny: [widget.currentUserId, widget.recipientId])
-                      .where('senderId', whereIn: [widget.currentUserId, widget.recipientId])
-                      
+                      .where('senderId',
+                          whereIn: [widget.currentUserId, widget.recipientId])
+
                       // .where('senderId', isEqualTo:  widget.recipientId)
                       // .where('recipientId', isEqualTo: widget.currentUserId)
                       .snapshots(),
@@ -82,17 +80,78 @@ void _sendMessage() async {
                   );
                 });
 
+                Widget _buildSentMessage(Message message) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              message.message,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              message.timestamp.toString(),
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
+                Widget _buildReceivedMessage(Message message) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[100],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              message.message,
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              message.timestamp.toString(),
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+
                 return ListView.builder(
-                  controller:
-                      _scrollController, // Attach the ScrollController to the ListView
+                  controller: _scrollController,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    return ListTile(
-                      title: Text(message.message),
-                      subtitle: Text(message.senderId),
-                      trailing: Text(message.timestamp.toString()),
-                    );
+                    return message.senderId == widget.currentUserId
+                        ? _buildSentMessage(message)
+                        : _buildReceivedMessage(message);
                   },
                 );
               },
