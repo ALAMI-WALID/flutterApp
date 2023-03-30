@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Utilisateur {
+class Utilisateur { 
   //attributs
   late String uid;
   String? pseudo;
