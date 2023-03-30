@@ -19,8 +19,8 @@ class FirebaseManager {
       return Future.error(("error"));
     } else {
       Map<String, dynamic> map = {"EMAIL": email};
-      addUser(uid!, map);
-      return getUser(uid!);
+      addUser(uid, map);
+      return getUser(uid);
     }
   }
 
@@ -93,17 +93,19 @@ class FirebaseManager {
         .collection('UTILISATEURS')
         .where('uid', isNotEqualTo: currentUserId)
         .get();
-    // List<String> users = snapshot.docs
-    //     .map((doc) =>
-    //         (doc.data() as Map<String, dynamic>)['EMAIL']?.toString() ?? '')
-    //     .toList();
+    List<String> users2 = snapshot.docs
+        .map((doc) =>
+            (doc.data() as Map<String, dynamic>)['EMAIL']?.toString() ?? '')
+        .toList();
+
+    print(users2);
+        
       List<Map<String, String>> users = snapshot.docs
       .map((doc) => {
         'email': (doc.data() as Map<String, dynamic>)['EMAIL']?.toString() ?? '',
         'uid':(doc.data() as Map<String, dynamic>)['uid']?.toString() ?? '',
       })
       .toList();
-    print("users");
 
     print(users);
     return users;

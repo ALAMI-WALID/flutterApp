@@ -1,4 +1,9 @@
+import 'dart:html';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mlkit/model/utilisateur.dart';
 import '../controller/firebase_manager.dart';
 
 class UserListWidget extends StatefulWidget {
@@ -32,18 +37,32 @@ class _UserListWidgetState extends State<UserListWidget> {
       appBar: AppBar(
         title: Text('User List'),
       ),
-      body: ListView.builder(
-        itemCount: _users?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) {
-          Map<String, String> user = _users[index];
-          return ListTile(
-            title: Text(user['email'] ?? ''),
-            onTap: () {
-              print(user['uid'] ?? '');
-            },
-          );
-        },
-      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseManager().cloudUsers.snapshots(),
+        builder: ((context, snapshot) {
+          if (snapshot.hasData) {
+            List document = snapshot.data!.docs;
+            return ListView.builder(
+              itemCount: document.length,
+              itemBuilder: (context, index) {
+               Utilisateur other= Utilisateur(document[index]);
+                return ListTile(
+                  title: Text(other.email),
+                  subtitle: Text(other.uid),
+                );
+              },
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        } 
+
+        
+        ),
+        )
+
     );
   }
 }

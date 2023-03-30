@@ -36,7 +36,6 @@ class _DashBoardState extends State<DashBoard> {
       appBar: AppBar(),
       body: bodyPage(currentPage),
       bottomNavigationBar: BottomNavigationBar(
-
         currentIndex: currentPage,
         onTap: (value){
           setState(() {
