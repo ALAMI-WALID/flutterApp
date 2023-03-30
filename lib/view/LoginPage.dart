@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           if(defaultTargetPlatform == TargetPlatform.iOS){
              return CupertinoAlertDialog(
                title: const Text("Erreur"),
-               content: Lottie.asset("assets/error.json"),
+               content: Lottie.asset("../assets/error.json"),
                actions: [
                  TextButton(
                      onPressed: (){
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             {
               return AlertDialog(
                 title: const Text("Erreur"),
-                content: Lottie.asset("assets/error.json"),
+                content: Lottie.asset("../assets/error.json"),
                 actions: [
                   TextButton(
                       onPressed: (){

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mlkit/model/utilisateur.dart';
 import '../controller/firebase_manager.dart';
+import 'message.dart';
 
 class UserListWidget extends StatefulWidget {
   @override
@@ -34,9 +35,6 @@ class _UserListWidgetState extends State<UserListWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('User List'),
-      ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseManager().cloudUsers.snapshots(),
         builder: ((context, snapshot) {
@@ -46,9 +44,23 @@ class _UserListWidgetState extends State<UserListWidget> {
               itemCount: document.length,
               itemBuilder: (context, index) {
                Utilisateur other= Utilisateur(document[index]);
+
                 return ListTile(
                   title: Text(other.email),
                   subtitle: Text(other.uid),
+                  // onTap open modal 
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          currentUserId: FirebaseAuth.instance.currentUser!.uid,
+                          recipientId: other.uid,
+                        ),
+                      ),
+                    );
+                  },
+                  
                 );
               },
             );

@@ -64,7 +64,8 @@ class _DashBoardState extends State<DashBoard> {
 
   Widget bodyPage(int page){
     switch(page){
-      case 0 : return ChatScreen(currentUserId: userId);
+      // case 0 : return ChatScreen(currentUserId: userId);
+      case 0 : return UserListWidget();
       case 1: return Text("Second page");
       default : return const Text("Mauvaise page");
     }

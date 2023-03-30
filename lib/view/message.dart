@@ -6,11 +6,14 @@ import '../model/message.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? currentUserId;
+   final String? recipientId;
 
-  ChatScreen({Key? key, required this.currentUserId}) : super(key: key);
 
-  @override
+  ChatScreen( {Key? key, required this.currentUserId, required this.recipientId});
+
+ @override
   _ChatScreenState createState() => _ChatScreenState();
+
 }
 
 class _ChatScreenState extends State<ChatScreen> {
@@ -29,6 +32,8 @@ void _sendMessage() async {
     FirebaseFirestore.instance.collection('messages').add({
       'message': messageText,
       'senderId': widget.currentUserId,
+      'recipientId': widget.recipientId,
+      'recipientEmail': FirebaseAuth.instance.currentUser!.email,
       'senderEmail': senderEmail,
       'timestamp': Timestamp.now(),
 
@@ -39,13 +44,20 @@ void _sendMessage() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        title: Text('Chat'),
+      ),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
               stream:
-                  FirebaseFirestore.instance.collection('messages').snapshots(),
+                  // recuperer les messages de la collection messages en fonction de l'id de l'utilisateur courant et de l'id du destinataire
+                  FirebaseFirestore.instance
+                      .collection('messages')
+                      .where('senderId', isEqualTo:  widget.currentUserId)
+                      .where('recipientId', isEqualTo: widget.recipientId)
+                      .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
