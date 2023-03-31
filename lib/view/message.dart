@@ -48,17 +48,10 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream:
-                  // recuperer les messages de la collection messages en fonction de l'id de l'utilisateur courant et de l'id du destinataire
-                  FirebaseFirestore.instance
-                      .collection('messages')
-                      // .where('users', arrayContainsAny: [widget.currentUserId, widget.recipientId])
-                      .where('senderId',
-                          whereIn: [widget.currentUserId, widget.recipientId])
-
-                      // .where('senderId', isEqualTo:  widget.recipientId)
-                      // .where('recipientId', isEqualTo: widget.currentUserId)
-                      .snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('messages')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -66,10 +59,26 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 }
 
-                final messages = snapshot.data!.docs
+                final initmessages = snapshot.data!.docs
                     .map((doc) => Message.fromFirestore(doc))
-                    .toList()
-                  ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+                    .toList();
+
+                final senderToRecipientMessages = initmessages.where(
+                    (message) =>
+                        message.senderId == widget.currentUserId &&
+                        message.recipientId == widget.recipientId);
+
+                final recipientToSenderMessages = initmessages.where(
+                    (message) =>
+                        message.senderId == widget.recipientId &&
+                        message.recipientId == widget.currentUserId);
+
+                final messages = [
+                  ...senderToRecipientMessages,
+                  ...recipientToSenderMessages
+                ];
+
+                messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
                 // Scroll to the end of the list when new messages arrive
                 WidgetsBinding.instance!.addPostFrameCallback((_) {
