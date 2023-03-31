@@ -50,6 +50,9 @@ class _UserListWidgetState extends State<UserListWidget> {
                   subtitle: Text(other.uid),
                   // onTap open modal 
                   onTap: () {
+                  print("user cible : "+other.uid);
+                  print("user courant : "+FirebaseAuth.instance.currentUser!.uid);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(

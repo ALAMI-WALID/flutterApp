@@ -7,6 +7,8 @@ class Message {
   final String senderEmail;
   final String recipientId;
   final String recipientEmail;
+  final String conversationId;
+
 
 
   Message({
@@ -16,6 +18,7 @@ class Message {
     required this.senderEmail,
     required this.recipientId,
     required this.recipientEmail,
+    required this.conversationId,
   });
 
   static Message fromFirestore(DocumentSnapshot doc) {
@@ -27,6 +30,7 @@ class Message {
       senderEmail: data['senderEmail'] ?? '',
       recipientId: data['recipientId'] ?? '',
       recipientEmail: data['recipientEmail'] ?? '',
+      conversationId: data['conversationId'] ?? '',
     );
   }
 }

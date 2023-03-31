@@ -28,11 +28,15 @@ class _ChatScreenState extends State<ChatScreen> {
     final currentUser = FirebaseAuth.instance.currentUser;
     final senderEmail = currentUser!.email;
 
+                  print("user cible : "+widget.recipientId.toString());
+                  print("user courant : "+FirebaseAuth.instance.currentUser!.uid);
+
     FirebaseFirestore.instance.collection('messages').add({
       'message': messageText,
       'senderId': widget.currentUserId,
       'recipientId': widget.recipientId,
-      'recipientEmail': FirebaseAuth.instance.currentUser!.email,
+      'recipientEmail': "emaildest@gmail.com",
+      "conversationId": widget.currentUserId.toString()+"_"+widget.recipientId.toString(),
       'senderEmail': senderEmail,
       'timestamp': Timestamp.now(),
     });
@@ -42,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: Text('Chat : ' + widget.recipientId.toString()),
       ),
       body: Column(
         children: [
@@ -53,8 +57,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   FirebaseFirestore.instance
                       .collection('messages')
                       // .where('users', arrayContainsAny: [widget.currentUserId, widget.recipientId])
-                      .where('senderId',
-                          whereIn: [widget.currentUserId, widget.recipientId])
+
+                      // .where('senderId', whereIn: [widget.currentUserId, widget.recipientId])
+                            .where('conversationId', isEqualTo: '${widget.currentUserId}_${widget.recipientId}')
 
                       // .where('senderId', isEqualTo:  widget.recipientId)
                       // .where('recipientId', isEqualTo: widget.currentUserId)
@@ -149,9 +154,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    return message.senderId == widget.currentUserId
+                    // if (
+                    // (message.senderId == widget.currentUserId && message.recipientId == widget.recipientId)|| 
+                    // (message.senderId == widget.recipientId && message.recipientId == widget.currentUserId)) {
+                                        return message.senderId == widget.currentUserId
                         ? _buildSentMessage(message)
                         : _buildReceivedMessage(message);
+                    // }
+  
                   },
                 );
               },
